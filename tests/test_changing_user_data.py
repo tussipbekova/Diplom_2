@@ -32,17 +32,17 @@ class TestChangingUserData:
 
         assert response.status_code == 200
 
-        @allure.step('Изменение данных пользователя без авторизации')
-        def test_changing_user_data_without_authorization(self):
+    @allure.step('Изменение данных пользователя без авторизации')
+    def test_changing_user_data_without_authorization(self):
 
-            payload = {
+        payload = {
                 "email": "saya10.test@yandex.ru",
                 "name": "Saya"
             }
 
-            response = requests.patch(f"{URL}{ENDPOINT_CHANGE_USER_DATA}", data=payload)
+        response = requests.patch(f"{URL}{ENDPOINT_CHANGE_USER_DATA}", data=payload)
 
-            assert response.status_code == 401
+        assert response.status_code == 401
 
 
 
