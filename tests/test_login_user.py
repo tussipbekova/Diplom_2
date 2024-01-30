@@ -17,7 +17,10 @@ class TestLoginUser:
         }
         response = requests.post(f"{URL}{ENDPOINT_LOGIN_USER}", data=payload)
 
-        assert response.status_code == 200
+        r = response.json()
+        s = r['success']
+
+        assert response.status_code == 200 and s is True
 
     @allure.step('Авторизация с неверным логином и паролем ')
     def test_login_user_false(self):
@@ -28,4 +31,7 @@ class TestLoginUser:
         }
         response = requests.post(f"{URL}{ENDPOINT_LOGIN_USER}", data=payload)
 
-        assert response.status_code == 401
+        r = response.json()
+        s = r['success']
+
+        assert response.status_code == 401 and s is False

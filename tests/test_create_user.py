@@ -20,10 +20,13 @@ class TestCreateUser:
 
         response = requests.post(f"{URL}{ENDPOINT_GREATE_USER}", data=payload)
 
-        assert response.status_code == 200
+        r = response.json()
+        s = r['success']
+
+        assert response.status_code == 200 and s is True
 
     @allure.step('Cоздание уже зарегистрированного пользователя')
-    def test_create_registered_user(self,generate_random_string):
+    def test_create_registered_user(self, generate_random_string):
 
         payload = {
             "email": "Saya.test@yandex.ru",
@@ -33,7 +36,10 @@ class TestCreateUser:
 
         response = requests.post(f"{URL}{ENDPOINT_GREATE_USER}", data=payload)
 
-        assert response.status_code == 403
+        r = response.json()
+        s = r['success']
+
+        assert response.status_code == 403 and s is False
 
     @allure.step('Cоздание  пользователя без одного поля(например логина)')
     def test_create_user_missing_login(self, generate_random_string):
@@ -47,5 +53,8 @@ class TestCreateUser:
 
         response = requests.post(f"{URL}{ENDPOINT_GREATE_USER}", data=payload)
 
-        assert response.status_code == 403
+        r = response.json()
+        s = r['success']
+
+        assert response.status_code == 403 and s is False
 

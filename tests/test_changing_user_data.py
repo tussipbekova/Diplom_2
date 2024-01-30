@@ -30,7 +30,10 @@ class TestChangingUserData:
         response = requests.patch(f"{URL}{ENDPOINT_CHANGE_USER_DATA}", headers={
     'Authorization': at}, data=payload)
 
-        assert response.status_code == 200
+        r = response.json()
+        s = r['success']
+
+        assert response.status_code == 200 and s is True
 
     @allure.step('Изменение данных пользователя без авторизации')
     def test_changing_user_data_without_authorization(self):
@@ -42,7 +45,10 @@ class TestChangingUserData:
 
         response = requests.patch(f"{URL}{ENDPOINT_CHANGE_USER_DATA}", data=payload)
 
-        assert response.status_code == 401
+        r = response.json()
+        s = r['success']
+
+        assert response.status_code == 401 and s is False
 
 
 

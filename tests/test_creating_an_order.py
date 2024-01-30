@@ -29,7 +29,7 @@ class TestCreatingAnOrder:
         response = requests.post(f"{URL}{ENDPOINT_CREATING_AN_ORDER}",headers={
             'Authorization': at}, data=payload)
 
-        assert response.status_code == 200
+        assert response.status_code == 200 and 'order' in response.json()
 
     @allure.step('Создание заказа без авторизации')
     def test_creating_an_order_without_authorization(self):
@@ -40,7 +40,7 @@ class TestCreatingAnOrder:
 
         response = requests.post(f"{URL}{ENDPOINT_CREATING_AN_ORDER}", data=payload)
 
-        assert response.status_code == 200
+        assert response.status_code == 200 and 'order' in response.json()
 
     @allure.step('Создание заказа без ингредиентов')
     def test_creating_an_order_with_ingredients(self,register_new_user_and_return_email_password):
@@ -63,7 +63,10 @@ class TestCreatingAnOrder:
         response = requests.post(f"{URL}{ENDPOINT_CREATING_AN_ORDER}", headers={
             'Authorization': at}, data=payload)
 
-        assert response.status_code == 400
+        r = response.json()
+        s = r['success']
+
+        assert response.status_code == 400 and s is False
 
     @allure.step('Создание заказа с неверным хэшем ингредиентов')
     def test_creating_an_order_with_false_ingredients(self):
