@@ -1,6 +1,6 @@
 URL = "https://stellarburgers.nomoreparties.site"
 ENDPOINT_GREATE_USER = "/api/auth/register"
 ENDPOINT_LOGIN_USER = "/api/auth/login"
-ENDPOINT_CHANGE_USER_DATA = "/api/auth/user"
+ENDPOINT_CHANGE_AND_DELETE_USER_DATA = "/api/auth/user"
 ENDPOINT_CREATING_AN_ORDER = "/api/orders"
 ENDPOINT_GET_ORDERS_AUTHORIZED_USER = "/api/orders"

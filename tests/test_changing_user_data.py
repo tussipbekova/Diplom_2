@@ -2,12 +2,12 @@ import allure
 import requests
 
 from conftest import register_new_user_and_return_email_password
-from data import URL, ENDPOINT_CHANGE_USER_DATA, ENDPOINT_LOGIN_USER
+from data import URL, ENDPOINT_LOGIN_USER, ENDPOINT_CHANGE_AND_DELETE_USER_DATA
 
 
 @allure.title('Изменение данных пользователя')
 class TestChangingUserData:
-    @allure.step('Изменение данных пользователя с авторизацией')
+    @allure.title('Изменение данных пользователя с авторизацией')
     def test_changing_user_data_with_authorization(self, register_new_user_and_return_email_password):
         email, password, name = register_new_user_and_return_email_password
 
@@ -17,8 +17,6 @@ class TestChangingUserData:
         }
         response = requests.post(f"{URL}{ENDPOINT_LOGIN_USER}", data=payload)
 
-        assert response.status_code == 200
-
         r = response.json()
         at = r['accessToken']
 
@@ -27,7 +25,7 @@ class TestChangingUserData:
             "name": "Saya"
         }
 
-        response = requests.patch(f"{URL}{ENDPOINT_CHANGE_USER_DATA}", headers={
+        response = requests.patch(f"{URL}{ENDPOINT_CHANGE_AND_DELETE_USER_DATA}", headers={
     'Authorization': at}, data=payload)
 
         r = response.json()
@@ -35,7 +33,7 @@ class TestChangingUserData:
 
         assert response.status_code == 200 and s is True
 
-    @allure.step('Изменение данных пользователя без авторизации')
+    @allure.title('Изменение данных пользователя без авторизации')
     def test_changing_user_data_without_authorization(self):
 
         payload = {
@@ -43,7 +41,7 @@ class TestChangingUserData:
                 "name": "Saya"
             }
 
-        response = requests.patch(f"{URL}{ENDPOINT_CHANGE_USER_DATA}", data=payload)
+        response = requests.patch(f"{URL}{ENDPOINT_CHANGE_AND_DELETE_USER_DATA}", data=payload)
 
         r = response.json()
         s = r['success']

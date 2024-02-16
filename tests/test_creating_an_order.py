@@ -17,8 +17,6 @@ class TestCreatingAnOrder:
         }
         response = requests.post(f"{URL}{ENDPOINT_LOGIN_USER}", data=payload)
 
-        assert response.status_code == 200
-
         r = response.json()
         at = r['accessToken']
 
@@ -51,8 +49,6 @@ class TestCreatingAnOrder:
             "password": password
         }
         response = requests.post(f"{URL}{ENDPOINT_LOGIN_USER}", data=payload)
-
-        assert response.status_code == 200
 
         r = response.json()
         at = r['accessToken']

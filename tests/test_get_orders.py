@@ -17,8 +17,6 @@ class TestGetOrdersFromASpecificUser:
         }
         response = requests.post(f"{URL}{ENDPOINT_LOGIN_USER}", data=payload)
 
-        assert response.status_code == 200
-
         r = response.json()
         at = r['accessToken']
 

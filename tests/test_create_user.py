@@ -1,21 +1,24 @@
 import allure
+import pytest
 import requests
 
 from data import URL, ENDPOINT_GREATE_USER
+from helpers import generate_random_string
 
 
 @allure.title('Создание пользователя')
 class TestCreateUser:
-    @allure.step('Cоздание уникального пользователя')
-    def test_create_unique_user(self,generate_random_string):
-        name = generate_random_string
-        email = generate_random_string+'@yandex.ru'
-        password = generate_random_string
 
+    name = generate_random_string()
+    email = generate_random_string() + '@yandex.ru'
+    password = generate_random_string()
+
+    @allure.step('Успешное создание уникального пользователя')
+    def test_create_unique_user(self):
         payload = {
-            "email": email,
-            "password": password,
-            "name": name
+            "email": self.email,
+            "password": self.password,
+            "name": self.name
         }
 
         response = requests.post(f"{URL}{ENDPOINT_GREATE_USER}", data=payload)
@@ -25,13 +28,13 @@ class TestCreateUser:
 
         assert response.status_code == 200 and s is True
 
-    @allure.step('Cоздание уже зарегистрированного пользователя')
-    def test_create_registered_user(self, generate_random_string):
+    @allure.step('Неуспешное создание уже зарегистрированного пользователя')
+    def test_create_registered_user(self):
 
         payload = {
-            "email": "Saya.test@yandex.ru",
-            "password": 'Saya789',
-            "name": 'Saya'
+            "email": self.email,
+            "password": self.password,
+            "name": self.name
         }
 
         response = requests.post(f"{URL}{ENDPOINT_GREATE_USER}", data=payload)
@@ -41,17 +44,15 @@ class TestCreateUser:
 
         assert response.status_code == 403 and s is False
 
-    @allure.step('Cоздание  пользователя без одного поля(например логина)')
-    def test_create_user_missing_login(self, generate_random_string):
-        email = generate_random_string + '@yandex.ru'
-        password = generate_random_string
+    @pytest.mark.parametrize('input',[
+        '{"email":"Saya6@gmail.com", "password": "12345"}',
+        '{"email": "Saya6@gmail.com", "name": "Saya"}',
+        '{"password": "12345", "name": "Saya"}'
+    ])
+    @allure.step('Неуспешное создание  пользователя без одного поля')
+    def test_create_user_missing_one_field(self, input):
 
-        payload = {
-            "email": email,
-            "password": password,
-        }
-
-        response = requests.post(f"{URL}{ENDPOINT_GREATE_USER}", data=payload)
+        response = requests.post(f"{URL}{ENDPOINT_GREATE_USER}", data=input)
 
         r = response.json()
         s = r['success']
